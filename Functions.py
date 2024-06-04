@@ -43,6 +43,7 @@ def plot_set_experiments(experimetal_data_dictionary):
 def plot_statistical_analysis(experimetal_data_dictionary):
     plt.rcParams["figure.figsize"] = [7.50, 3.50]
     plt.rcParams["figure.autolayout"] = True
+    
     name = experimetal_data_dictionary['name']
     del experimetal_data_dictionary['name']    
 
@@ -59,8 +60,6 @@ def plot_statistical_analysis(experimetal_data_dictionary):
 
     columns2 = ['y2_' + str(i) for i in range(len(experimetal_data_dictionary))] + ['Time (s)']
     df_displacement = pd.DataFrame(columns = columns2)
-
-    df_force['Time (s)'] = df_displacement['Time (s)'] = x_
 
     for i in range(len(experimetal_data_dictionary)):
         x = experimetal_data_dictionary[i].iloc[:,0].to_numpy() - experimetal_data_dictionary[i].iloc[0,0]
@@ -94,8 +93,9 @@ def plot_statistical_analysis(experimetal_data_dictionary):
     experimetal_data_dictionary['name'] = name
     
     df = pd.DataFrame()
+    df['Time'] = x_
     df['Force-mean'] = df_force.iloc[:, 0:len(experimetal_data_dictionary)].mean(axis = 1)
-    df['Force-std'] = df_displacement.iloc[:, 0:len(experimetal_data_dictionary)].std(axis = 1)
+    df['Force-std'] = df_force.iloc[:, 0:len(experimetal_data_dictionary)].std(axis = 1)
     
     df['Displacement-mean'] = df_displacement.iloc[:, 0:len(experimetal_data_dictionary)].mean(axis = 1)
     df['Displacement-std'] = df_displacement.iloc[:, 0:len(experimetal_data_dictionary)].std(axis = 1)
@@ -110,3 +110,29 @@ def plot_statistical_analysis(experimetal_data_dictionary):
     df_force.to_csv(sfile + '/' + 'output' + str(name) + '.csv', columns=['Average','Time (s)'],index=False)
 
     return df
+
+def comparison_plot(data_dictionary):
+    plt.rcParams["figure.figsize"] = [7.50, 3.50]
+    plt.rcParams["figure.autolayout"] = True
+    
+    fig, ax1 = plt.subplots()
+    ax1.set_ylim(0,600)  
+    ax1.set_xlim(0,900)  
+    ax1.grid()
+    ax2 = ax1.twinx()
+    
+    for i in range(len(data_dictionary)):
+        x = data_dictionary[i]['Time'].to_numpy()
+        y1 = data_dictionary[i]['Force-mean'].to_numpy()
+        y2 = data_dictionary[i]['Displacement-mean'].to_numpy()
+        
+        y1_std = data_dictionary[i]['Force-std'].to_numpy()
+        y2_std = data_dictionary[i]['Displacement-std'].to_numpy()
+        
+        ax1.plot(x, y1)
+        ax2.plot(x, y2)
+        
+        # NAO FUNCIONA!
+        ax1.fill_between(x, y1 - y1_std, 
+                             y1 + y1_std, 
+                             color = 'red', alpha = 0.4)
