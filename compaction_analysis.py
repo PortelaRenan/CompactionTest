@@ -8,6 +8,7 @@ Created on Tue May 28 15:00:40 2024
 import numpy as np
 from pymoo.algorithms.soo.nonconvex.pso import PSO
 from compaction_problem import Compaction_Problem
+from maxwell_problem import Maxwell_Model
 from pymoo.optimize import minimize
 from pymoo.core.repair import NoRepair
 from pymoo.visualization.scatter import Scatter
@@ -17,10 +18,12 @@ from pymoo.termination.default import DefaultSingleObjectiveTermination
 import time
 import matplotlib.pyplot as plt
 
-max_iter = 60000
+max_iter = 80000
 my_pop_size = 7000
 
-problem = Compaction_Problem()
+#problem = Compaction_Problem()
+
+problem = Maxwell_Model()
 
 algorithm = PSO(pop_size = my_pop_size,
                 sampling=LHS(),
@@ -39,7 +42,7 @@ algorithm = PSO(pop_size = my_pop_size,
 termination = DefaultSingleObjectiveTermination(
     ftol = 1e-6, # tolerance of the objective space
     period = 100, # number of generations to compare tolerances        
-    n_max_gen = 100, # maximum number of generations
+    n_max_gen = 150, # maximum number of generations
     n_max_evals = max_iter) # maximum number of function evaluations
 
 start_wallclock_time = time.time()
