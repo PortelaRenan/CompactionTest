@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🧵 Compaction Test of Infiltrated UD-NCF
+# Compaction Test of Infiltrated UD-NCF
 
 **Viscoelastic model fitting (Maxwell and fractional Zener) with Particle Swarm Optimization**
 
